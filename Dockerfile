@@ -31,4 +31,4 @@ RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framewor
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "composer install --no-interaction --prefer-dist --ignore-platform-reqs || true; php artisan key:generate --force || true; php artisan migrate --force || true; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+CMD ["sh", "-c", "set -e; [ -f .env ] || cp .env.example .env; touch database/database.sqlite; composer install --no-interaction --prefer-dist --ignore-platform-reqs; if [ -z \"$APP_KEY\" ]; then php artisan key:generate --force; fi; php artisan config:clear; php artisan migrate --force; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
